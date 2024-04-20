@@ -5,7 +5,6 @@ using ECommerce.API.Products.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
-
 namespace ECommerce.API.Products.Providers;
 
 public class ProductsProvider : IProductsProvider
