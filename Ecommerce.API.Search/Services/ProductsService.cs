@@ -29,8 +29,7 @@ public class ProductsService : IProductsService
                 var result = JsonSerializer.Deserialize<IEnumerable<Product>>(content, options);
                 return (true, result, string.Empty);
             }
-            return (false, null, response.ReasonPhrase);
-        
+            return (false, null, response.ReasonPhrase ?? "Failed to get products");
         }
         catch (Exception ex)
         {

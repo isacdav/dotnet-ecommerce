@@ -3,33 +3,33 @@
 using Ecommerce.API.Search.Interfaces;
 using Ecommerce.API.Search.Models;
 
-namespace Ecommerce.API.Search;
+namespace Ecommerce.API.Search.Services;
 
-public class OrdersService : IOrdersService
+public class CustomersService : ICustomerService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<OrdersService> _logger;
 
-    public OrdersService(IHttpClientFactory httpClientFactory, ILogger<OrdersService> logger)
+    public CustomersService(IHttpClientFactory httpClientFactory, ILogger<OrdersService> logger)
     {
         _httpClientFactory = httpClientFactory;
-        _logger = logger;   
+        _logger = logger;
     }
 
-    public async Task<(bool IsSuccess, IEnumerable<Order>? Orders, string ErrorMessage)> GetOrderAsync(int customerId)
+    public async Task<(bool IsSuccess, Customer? Customer, string ErrorMessage)> GetCustomerAsync(int customerId)
     {
-        try 
+        try
         {
-            var client = _httpClientFactory.CreateClient("OrdersService");
-            var response = await client.GetAsync($"api/orders/{customerId}");
+            var client = _httpClientFactory.CreateClient("CustomersService");
+            var response = await client.GetAsync($"api/customers/{customerId}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsByteArrayAsync();
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var result = JsonSerializer.Deserialize<IEnumerable<Order>>(content, options);
+                var result = JsonSerializer.Deserialize<Customer>(content, options);
                 return (true, result, string.Empty);
             }
-            return (false, null, response.ReasonPhrase ?? "Failed to get orders");
+            return (false, null, response.ReasonPhrase ?? "Failed to get customer");
         }
         catch (Exception ex)
         {
@@ -37,4 +37,5 @@ public class OrdersService : IOrdersService
             return (false, null, ex.Message);
         }
     }
+
 }
